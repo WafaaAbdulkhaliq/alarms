@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <title> Alarms </title>
+    <style>
+       *{
+
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+        body{
+            background:#46468a;
+        }
+
+.container {
+    width: 100%;
+    height: 100vh;
+    background:#c4c4e2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.frame {
+    background: #46468a;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.frame form input {
+    border: 0;
+    outline: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    box-shadow:  15px rgba(255, 255, 255, 0.1), 5px 5px 15px rgba(0, 0, 0, 0.2);
+    background: transparent;
+    font-size: 20px;
+    color: #fff;
+    cursor: pointer;
+    margin: 10px;
+}
+
+form .display {
+   
+    margin: 20px 0;
+    
+    background-color: beige;
+   
+
+
+}
+
+
+form .x {
+    /* display: flex;
+    justify-content: flex-end; */
+    margin: 20px 0;
+    background-color: rgba(189, 57, 17,.7);
+   
+    width: 20px !important;
+    display: inline-block;
+
+
+}
+
+form .alarmSet {
+    /* display: flex;
+    justify-content: flex-end; */
+    margin: 20px 0;
+    background-color: beige;
+    width: 220px !important;
+    display: inline-block;
+     border-radius: 30px; 
+
+
+}
+
+
+
+form .alarm {
+    /* display: flex;
+    justify-content: flex-end; */
+    margin: 20px 0;
+    background-color: rgb(26, 26, 23);
+   
+
+
+}
+
+
+form .alarmSet input {
+    text-align: right;
+    
+    flex: 1;
+    font-size: 45px;
+    box-shadow: none;
+    color: black;
+    display: block;
+    width: 210px !important;
+
+}
+form .display input {
+    text-align: right;
+    padding: 5px;
+    flex: 1;
+    font-size: 45px;
+    box-shadow: none;
+    color: black;
+    display: block;
+    width: 300px !important;
+
+}
+
+form input.timer {
+    background-color: rgba(16, 71, 16, 0.4);
+    color: white !important;
+    width: 100px;
+}
+
+form input.ac {
+    background-color: rgba(117, 38, 18, .4);
+    color: black !important;
+    ;
+}
+
+form input.operation {
+    color: rgb(189, 57, 17);
+}
+
+.deleteBtn{
+    color: red;
+    border: none;
+    width: 20px;
+    height: 20px;
+    font-weight: 500 ;
+
+    position: relative;
+    left:70px;
+    top:15px;
+    
+    
+}
+.deleteBtn:hover{
+    cursor: pointer;
+}
+.outer {
+    background: green;
+    height: 60px;
+    display: block;
+}
+
+.button {
+    margin-left: 93%;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="frame">
+            <form action="">
+                <div class="display">
+                    <input type="text" name="" id="time" readonly>
+                </div>
+
+                <input type="number" min="00" max="24" name="" id="hours" placeholder="00">
+                <span style="color: white; font-weight: bold;">:</span>
+                <input type="number" min="00" max="60" name="" id="min" placeholder="00">
+                <input type="number" min="00" max="60" name="" id="sec" placeholder="00">
+              
+               
+                <input type="button" value="Set time" id="lab" class="operation timer" onclick="setTimer()">
+                <br>
+                <center>
+
+                    <div class="alarmSet">
+
+
+
+
+                        <div id="alarms"></div>
+
+
+                    </div>
+                </center>
+
+            </form>
+        </div>
+    </div>
+    <script >
+
+        var currentTime;
+        setInterval(function () {
+            var d = new Date();
+            var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            currentTime = formatZero(d.getHours()) + " : " + formatZero(d.getMinutes()) + " : " + formatZero(d.getSeconds()) +  "\n"
+            document.getElementById("time").value = currentTime;
+            savedTime.forEach(element => {
+                if (element.getHours() == d.getHours() && element.getMinutes() == d.getMinutes() && element.getMinutes() == d.getMinutes() && element.getSeconds() == d.getSeconds()) {
+                    var note_a = new Audio("crash.mp3");
+
+                    note_a.play();
+                    //remove item
+                    const index = savedTime.indexOf(element);
+                    savedTime.splice(index, 1);
+                    alarmList()
+
+
+
+
+
+                }
+                console.log(savedTime)
+
+
+
+            });
+        }
+        , 1000)
+
+
+
+
+        function formatZero(num) {
+            return String(num).padStart(2, '0')
+        }
+
+
+        function setTimer() {
+            var newAlarm = new Date();
+            newAlarm.setHours(document.getElementById("hours").value);
+            newAlarm.setMinutes(document.getElementById("min").value);
+            newAlarm.setSeconds(document.getElementById("sec").value);
+            console.log(newAlarm);
+            savedTime.push(newAlarm);
+            alarmList()
+
+        }
+        function removeAlarm(index) {
+            console.log(savedTime)
+            savedTime.splice(index, 1);
+            alarmList()
+        }
+
+        function alarmList() {
+
+            content = "<h2>Alarms</h2>";
+            //console.log(typeof savedTime[0].getHours())
+
+            for (let i = 0; i < savedTime.length; i++) {
+
+                content += `<span class="deleteBtn" onclick="removeAlarm()" >x</span><p> ${formatZero(savedTime[i].getHours())}
+          :  ${formatZero(savedTime[i].getMinutes())}
+          : ${formatZero(savedTime[i].getSeconds())}</p>`
+
+            }
+
+
+            document.getElementById("alarms").innerHTML = content;
+
+        }
+
+
+
+        var savedTime = [];
+    </script>
+</body>
+</html>
